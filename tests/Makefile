@@ -1,0 +1,34 @@
+BUILD_DIRECTORY = build
+DEBUG_BUILD_DIRECTORY = build_debug
+
+
+QUERY_BUILDER = query-builder
+QUERY_BUILDER_DIRECTORY = $(CURDIR)/../
+QUERY_BUILDER_LIBRARY_DIRECTORY = $(QUERY_BUILDER)/lib
+
+
+CMAKE_FLAGS = -DCMAKE_PREFIX_PATH=$(QUERY_BUILDER_LIBRARY_DIRECTORY)
+
+all: $(BUILD_DIRECTORY) $(QUERY_BUILDER)
+	cmake -B $(BUILD_DIRECTORY) $(CMAKE_FLAGS)
+	cmake --build $(BUILD_DIRECTORY) -- -j$(nproc) 
+	mv build/compile_commands.json ./
+debug: $(BUILD_DIRECTORY) $(QUERY_BUILDER)
+	cmake -B $(DEBUG_BUILD_DIRECTORY) $(CMAKE_FLAGS) -DCMAKE_BUILD_TYPE=Debug 
+	cmake --build $(DEBUG_BUILD_DIRECTORY) -- -j$(nproc) 
+	mv build/compile_commands.json ./
+
+$(BUILD_DIRECTORY):
+	mkdir -p $(BUILD_DIRECTORY)
+
+$(QUERY_BUILDER):
+	mkdir -p $(QUERY_BUILDER)
+	cmake -B $(QUERY_BUILDER) -S $(QUERY_BUILDER_DIRECTORY)
+	cmake --build $(QUERY_BUILDER) -- -j$(nproc)
+	mkdir -p $(QUERY_BUILDER_LIBRARY_DIRECTORY)
+	cmake --install $(QUERY_BUILDER) --prefix $(QUERY_BUILDER_LIBRARY_DIRECTORY) 
+
+clean:
+	rm -rf $(BUILD_DIRECTORY) $(DEBUG_BUILD_DIRECTORY) $(QUERY_BUILDER) compile_commands.json
+
+.PHONY: $(QUERY_BUILDER)
