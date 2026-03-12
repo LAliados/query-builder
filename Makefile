@@ -1,4 +1,3 @@
-Makefile
 BUILD_DIRECTORY = build
 DEBUG_BUILD_DIRECTORY = build_debug
 LIBRARY_DIRECTORY = $(CURDIR)/lib
@@ -6,12 +5,12 @@ LIBRARY_DIRECTORY = $(CURDIR)/lib
 
 all: $(BUILD_DIRECTORY)
 	cmake -B $(BUILD_DIRECTORY)  
-	cmake --build $(BUILD_DIRECTORY) -- -j$(nproc) 
+	cmake --build $(BUILD_DIRECTORY) -- -j$(shell nproc) 
 	mkdir -p lib 
 	cmake --install $(BUILD_DIRECTORY) --prefix $(LIBRARY_DIRECTORY) 
 debug: $(BUILD_DIRECTORY)
 	cmake -B $(DEBUG_BUILD_DIRECTORY) -DCMAKE_BUILD_TYPE=Debug 
-	cmake --build $(DEBUG_BUILD_DIRECTORY) -- -j$(nproc) 
+	cmake --build $(DEBUG_BUILD_DIRECTORY) -- -j$(shell nproc) 
 	mkdir -p lib 
 	cmake --install $(DEBUG_BUILD_DIRECTORY) --prefix $(LIBRARY_DIRECTORY) 
 

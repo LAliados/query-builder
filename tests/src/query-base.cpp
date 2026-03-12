@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <base.hpp>
 #include <query_base.hpp>
+#include <math/ariphmetic.hpp>
 
 
 
@@ -67,4 +68,14 @@ TEST(QUERY_BASE_TEST, TYPE_TRAITS_TEST) {
     EXPECT_TRUE(Utility::like_predicate_v<decltype(UnverifiedQuery(RawQuery("Some string")))>);
     EXPECT_FALSE(Utility::like_predicate_v<std::string>);
     EXPECT_FALSE(Utility::like_predicate_v<RawQuery>);
+}
+
+
+TEST(QUERY_BASE_TEST, LIKE_AND_IN_OPERATOR_TEST) {
+    auto likePredicate = like("name", "%ann%");
+    auto inPredicate = in("status", "(1,2,3)");
+
+    EXPECT_TRUE(static_cast<std::string>(likePredicate).find(" LIKE ") != std::string::npos);
+    EXPECT_TRUE(static_cast<std::string>(likePredicate).find(" IN ") == std::string::npos);
+    EXPECT_TRUE(static_cast<std::string>(inPredicate).find(" IN ") != std::string::npos);
 }

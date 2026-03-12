@@ -17,7 +17,7 @@ public:
                 retString += "NOT ";
                 break;
             default:
-                assert(true || "Unsupported unary operation");
+                assert(false && "Unsupported unary operation");
                 break;
         }
         retString += static_cast<std::string>(*m_object);
@@ -95,10 +95,12 @@ public:
                 break;
             case Like:
                 retString += " LIKE ";
+                break;
             case In:
                 retString += " IN ";
+                break;
             default:
-                assert(true || "Unsupported binary operator");
+                assert(false && "Unsupported binary operator");
         }
         retString += static_cast<std::string>(*m_right);
         retString += ")";

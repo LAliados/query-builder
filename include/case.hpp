@@ -24,7 +24,7 @@ public:
                       Utility::like_query_v<decltype(std::declval<T>().begin()->second)> && Utility::like_query_v<U>,
                   bool> = true>
     explicit constexpr Case(T&& iterableObject, U&& elseObject) : Case(std::forward<T>(iterableObject)) {
-        m_elseObject = &Utility::getQueryObject(std::forward<U>(elseObject));
+        m_elseObject = Utility::getQueryObject(std::forward<U>(elseObject));
     }
 
     template <typename T, typename U,
