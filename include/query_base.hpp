@@ -114,17 +114,26 @@ public:
     typedef std::remove_reference_t<T> Type;
 
 private:
-    std::conditional_t<std::is_lvalue_reference_v<T>, Type, RawQuery>* m_object;
-
-
-    static decltype(m_object) getObject(Type& object) { return &object; }
-    static decltype(m_object) getObject(Type&& object) { return new RawQuery(static_cast<std::string>(object)); }
+    QueryObject* m_object = nullptr;
+    bool m_isOwner = false;
 
 public:
-    explicit constexpr UnverifiedQueryType(T&& base) { m_object = getObject(std::forward<T>(base)); }
-    operator auto &() { return *m_object; };
+    explicit constexpr UnverifiedQueryType(T&& base) {
+        if constexpr (std::is_lvalue_reference_v<T>) {
+            m_object = &base;
+            m_isOwner = false;
+        } else {
+            m_object = new RawQuery(static_cast<std::string>(base));
+            m_isOwner = true;
+        }
+    }
+    operator auto&() { return *m_object; };
     explicit operator std::string() const override { return static_cast<std::string>(*m_object); }
-    ~UnverifiedQueryType() override { delete m_object; }
+    ~UnverifiedQueryType() override {
+        if (m_isOwner) {
+            delete m_object;
+        }
+    }
 };
 
 template <typename T>

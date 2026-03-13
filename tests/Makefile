@@ -11,11 +11,11 @@ CMAKE_FLAGS = -DCMAKE_PREFIX_PATH=$(QUERY_BUILDER_LIBRARY_DIRECTORY)
 
 all: $(BUILD_DIRECTORY) $(QUERY_BUILDER)
 	cmake -B $(BUILD_DIRECTORY) $(CMAKE_FLAGS)
-	cmake --build $(BUILD_DIRECTORY) -- -j$(nproc) 
+	cmake --build $(BUILD_DIRECTORY) -- -j$(shell nproc) 
 	mv build/compile_commands.json ./
 debug: $(BUILD_DIRECTORY) $(QUERY_BUILDER)
 	cmake -B $(DEBUG_BUILD_DIRECTORY) $(CMAKE_FLAGS) -DCMAKE_BUILD_TYPE=Debug 
-	cmake --build $(DEBUG_BUILD_DIRECTORY) -- -j$(nproc) 
+	cmake --build $(DEBUG_BUILD_DIRECTORY) -- -j$(shell nproc) 
 	mv build/compile_commands.json ./
 
 $(BUILD_DIRECTORY):
@@ -24,7 +24,7 @@ $(BUILD_DIRECTORY):
 $(QUERY_BUILDER):
 	mkdir -p $(QUERY_BUILDER)
 	cmake -B $(QUERY_BUILDER) -S $(QUERY_BUILDER_DIRECTORY)
-	cmake --build $(QUERY_BUILDER) -- -j$(nproc)
+	cmake --build $(QUERY_BUILDER) -- -j$(shell nproc)
 	mkdir -p $(QUERY_BUILDER_LIBRARY_DIRECTORY)
 	cmake --install $(QUERY_BUILDER) --prefix $(QUERY_BUILDER_LIBRARY_DIRECTORY) 
 

@@ -80,7 +80,7 @@ public:
                 str += " SELF JOIN ";
                 break;
             default:
-                assert(true && "Undefined join type");
+                assert(false && "Undefined join type");
         }
         if (m_isRightSimple) {
             str += static_cast<std::string>(*m_right);
