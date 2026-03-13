@@ -72,8 +72,8 @@ TEST(QUERY_BASE_TEST, TYPE_TRAITS_TEST) {
 
 
 TEST(QUERY_BASE_TEST, LIKE_AND_IN_OPERATOR_TEST) {
-    auto likePredicate = like("name", "%ann%");
-    auto inPredicate = in("status", "(1,2,3)");
+    auto& likePredicate = like("name", "%ann%");
+    auto& inPredicate = in("status", "(1,2,3)");
 
     EXPECT_TRUE(static_cast<std::string>(likePredicate).find(" LIKE ") != std::string::npos);
     EXPECT_TRUE(static_cast<std::string>(likePredicate).find(" IN ") == std::string::npos);

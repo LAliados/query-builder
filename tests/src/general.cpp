@@ -10,7 +10,8 @@ using namespace QueryBuilder;
 
 TEST(GENERAL_TEST, COMPLEX_SELECT_QUERY_TEST) {
     SelectQuery query;
-    auto salary = max("salary").setName("max_salary");
+    auto& salary = max("salary");
+    salary.setName("max_salary");
 
     query.select() << "name" << TableField("users", "age") << salary;
     query.from() << leftJoin("users", "payments", TableField("users", "id") == TableField("payments", "user_id"));
